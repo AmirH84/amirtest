@@ -1,1 +1,114 @@
-vmess://eyJhZGQiOiJMdWNpZmVyTUNJLU1UTi5teWZ0cC5vcmciLCJhaWQiOiIwIiwiYWxwbiI6ImgyIiwiZnAiOiIiLCJob3N0IjoiIiwiaWQiOiJjOGFmOGVmMy04MWRhLTRkYjUtZDFiNS1kYWE0NWQ4ZDE5NzciLCJuZXQiOiJncnBjIiwicGF0aCI6IiIsInBvcnQiOiIyMDg3IiwicHMiOiJ0ZXN0IGJlYXQiLCJzY3kiOiJhdXRvIiwic25pIjoiYmFua21lbGkuY2wzdjNyLmNsaWNrIiwidGxzIjoidGxzIiwidHlwZSI6Imd1biIsInYiOiIyIn0=
+{
+  "dns": {
+    "hosts": {
+      "domain:googleapis.cn": "googleapis.com"
+    },
+    "servers": [
+      "1.1.1.1"
+    ]
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "userLevel": 8
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls"
+        ],
+        "enabled": true
+      },
+      "tag": "socks"
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "userLevel": 8
+      },
+      "tag": "http"
+    }
+  ],
+  "log": {
+    "loglevel": "warning"
+  },
+  "outbounds": [
+    {
+      "mux": {
+        "concurrency": 8,
+        "enabled": false
+      },
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "LuciferMCI-MTN.myftp.org",
+            "port": 2087,
+            "users": [
+              {
+                "alterId": 0,
+                "encryption": "",
+                "flow": "",
+                "id": "c8af8ef3-81da-4db5-d1b5-daa45d8d1977",
+                "level": 8,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "grpcSettings": {
+          "multiMode": false,
+          "serviceName": ""
+        },
+        "network": "grpc",
+        "security": "tls",
+        "tlsSettings": {
+          "allowInsecure": true,
+          "alpn": [
+            "h2"
+          ],
+          "fingerprint": "",
+          "serverName": "bankmeli.cl3v3r.click"
+        }
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      },
+      "tag": "block"
+    }
+  ],
+  "routing": {
+    "domainMatcher": "mph",
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "ip": [
+          "1.1.1.1"
+        ],
+        "outboundTag": "proxy",
+        "port": "53",
+        "type": "field"
+      }
+    ]
+  }
+}
